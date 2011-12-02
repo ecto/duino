@@ -56,6 +56,7 @@ void sm(char *pin, char *val) {
  */
 void dw(char *pin, char *val) {
   int p = atoi(pin);
+  pinMode(p, OUTPUT);
   if (strcmp(val, "00") == 0) digitalWrite(p, LOW);
   else digitalWrite(p, HIGH);
 }
