@@ -41,13 +41,23 @@ void process() {
   }
 }
 
-
+/*
+ * Set pin mode
+ */
 void sm(char *pin, char *val) {
   Serial.println('0');
 }
+
+/*
+ * Digital write
+ */
 void dw(char *pin, char *val) {
   Serial.println('1');
 }
+
+/*
+ * Digital read
+ */
 void dr(char *pin, char *val) {
   Serial.println('2');
 }
