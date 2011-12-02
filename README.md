@@ -66,11 +66,13 @@ Blink the LED at `interval` ms. Defaults to 1000
 
 ##button
 
-Coming soon
-
 ##servo
 
-Coming soon
+##motor
+
+##piezo
+
+##potentiometer
 
 # license
 
