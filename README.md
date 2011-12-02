@@ -74,6 +74,13 @@ Constants for use in low-level digital writes
 
 ##led
 
+````javascript
+var led = new arduino.Led({
+  board: board,
+  pin: 13
+});
+````
+
 ###led.on()
 
 Turn the LED on
@@ -95,6 +102,38 @@ Blink the LED at `interval` ms. Defaults to 1000
 ##piezo
 
 ##potentiometer
+
+# protocol
+
+Each message sent to the Arduino board by the **board** class has 8 bytes.
+
+A full message looks like this:
+
+    !011301.
+
+`!` Start
+`01` Command (digitalWrite)
+`13` Pin number
+`01` Value (high)
+`.` Stop
+
+I was drunk. It works.
+
+##command
+
+What is implemented right now:
+
+*  `00` pinMode
+*  `01` digitalWrite
+
+##pin
+
+I haven't tested analog pins yet. Soon. Digital pins 0-13 tested.
+
+##value
+
+*  `00` low
+*  `01` high
 
 # license
 
