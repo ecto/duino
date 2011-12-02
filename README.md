@@ -44,12 +44,11 @@ Set the mode for a pin. `mode` is either `'in'` or `'out'`
 
 ###board.digitalWrite(pin, val)
 
-Write of the following to a pin:
+Write one of the following to a pin:
 
 ####board.HIGH and board.LOW
 
 Constants for use in low-level digital writes
-
 
 ##led
 
@@ -65,7 +64,13 @@ Turn the LED off
 
 Blink the LED at `interval` ms. Defaults to 1000
 
+##button
+
+Coming soon
+
 ##servo
+
+Coming soon
 
 # license
 
