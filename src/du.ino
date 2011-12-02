@@ -12,8 +12,9 @@ void setup() {
 void loop() {
   while(Serial.available() > 0) {
     char x = Serial.read();
-    if (x != '\n' && x != '\r') messageBuffer[index++] = x;
-    if (index == 6) process();
+    if (x == '!') index = 0;      // start
+    else if (x == '.') process(); // end
+    else messageBuffer[index++] = x;
   }
 }
 
@@ -37,7 +38,7 @@ void process() {
   } else if (strcmp(cmd, "02") == 0) {
       dr(pin, val);
   } else {
-    Serial.println(-1);
+    Serial.println(messageBuffer);
   }
 }
 
@@ -62,7 +63,5 @@ void dw(char *pin, char *val) {
 /*
  * Digital read
  */
-void dr(char *pin, char *val) {
-  Serial.println('2');
-}
+void dr(char *pin, char *val) {}
 
