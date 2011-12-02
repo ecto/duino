@@ -22,7 +22,7 @@ var led = new arduino.Led({
 led.blink();
 ````
 
-# wat
+# what ಠ_ಠ
 
 The way this works is simple (in theory, not in practice). The Arduino listens for low-level signals over a serial port, while we abstract all of the logic on the Node side.
 
