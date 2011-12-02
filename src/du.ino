@@ -54,7 +54,9 @@ void sm(char *pin, char *val) {
  * Digital write
  */
 void dw(char *pin, char *val) {
-  Serial.println('1');
+  int p = atoi(pin);
+  if (strcmp(val, "00") == 0) digitalWrite(p, LOW);
+  else digitalWrite(p, HIGH);
 }
 
 /*
