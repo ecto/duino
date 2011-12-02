@@ -45,7 +45,9 @@ void process() {
  * Set pin mode
  */
 void sm(char *pin, char *val) {
-  Serial.println('0');
+  int p = atoi(pin);
+  if (strcmp(val, "00") == 0) pinMode(p, OUTPUT);
+  else pinMode(p, INPUT);
 }
 
 /*
