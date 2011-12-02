@@ -14,10 +14,6 @@ A framework for working with Arduinos in node.js
 var arduino = require('duino'),
     board = new arduino.Board();
 
-board.on('connected', function(){
-  board.write('Hello world!');
-});
-
 var led = new arduino.Led({
   board: board,
   pin: 13
@@ -26,9 +22,35 @@ var led = new arduino.Led({
 led.blink();
 ````
 
+# wat
+
+The way this works is simple (in theory, not in practice). The Arduino listens for low-level signals over a serial port, while we abstract all of the logic on the Node side.
+
+1.  Plug in your Arduino
+2.  Upload the C code at `./src/du.ino` to it
+3.  Write a simple **duino** script
+4.  ?????
+5.  Profit!
+
 # libraries
 
 ##board
+
+Right now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.
+
+    var board = new arduino.Board();
+
+The **board** object is an EventEmitter. You can listen for `connected`, `data` and `message`. Data is a raw output from the serial port. Message is emitted after a newline is encountered and is just a vanity funtion.
+
+````javascript
+board.on('connected', function(){
+  console.log('Connected!');
+});
+
+board.on('message', function(m){
+  console.log(m);
+}
+````
 
 ###board.serial
 
