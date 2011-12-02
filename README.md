@@ -17,13 +17,53 @@ var arduino = require('duino'),
 board.on('connected', function(){
   board.write('Hello world!');
 });
+
+var led = new arduino.Led({
+  board: board,
+  pin: 13
+});
+
+led.blink();
 ````
 
 # libraries
 
 ##board
 
+###board.serial
+
+Low-level access to the serial connection to the board
+
+###board.write(msg)
+
+Write a message to the board using predefined delimiters
+
+###board.pinMode(pin, mode)
+
+Set the mode for a pin. `mode` is either `'in'` or `'out'`
+
+###board.digitalWrite(pin, val)
+
+Write of the following to a pin:
+
+####board.HIGH and board.LOW
+
+Constants for use in low-level digital writes
+
+
 ##led
+
+###led.on()
+
+Turn the LED on
+
+###led.off()
+
+Turn the LED off
+
+###led.blink(interval)
+
+Blink the LED at `interval` ms. Defaults to 1000
 
 ##servo
 
