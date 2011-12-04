@@ -120,13 +120,13 @@ var led = new arduino.Led({
 ````
 Pin will default to 13.
 
-##piezo.note(note, duration)
+###piezo.note(note, duration)
 
 Play a pre-calculated note for a given duration (in milliseconds).
 
 `note` must be a string, one of `d`, `e`, `f`, `g`, `a`, `b`, or `c` (must be lowercase)
 
-##piezo.tone(tone, duration)
+###piezo.tone(tone, duration)
 
 Write a square wave to the piezo element.
 
