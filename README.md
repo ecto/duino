@@ -111,7 +111,7 @@ Blink the LED at `interval` ms. Defaults to 1000
 ##piezo
 
 ````javascript
-var led = new arduino.Led({
+var led = new arduino.Piezo({
   board: board,
   pin: 13
 });
