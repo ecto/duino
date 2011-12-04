@@ -7,7 +7,7 @@ char val[3];
 bool debug = false;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {
