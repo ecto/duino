@@ -38,7 +38,15 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 Right now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.
 
-    var board = new arduino.Board();
+````javascript
+var board = new arduino.Board({
+  debug: true
+});
+````
+
+Debug mode is off by default. Turning it on will enable verbose logging in your terminal, and tell the Arduino board to echo everthing back to you. You will get something like this:
+
+![debug](http://i.imgur.com/W7LUW.png)
 
 The **board** object is an EventEmitter. You can listen for `connected`, `data` and `message`. Data is a raw output from the serial port. Message is emitted after a newline is encountered and is just a vanity funtion.
 
