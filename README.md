@@ -48,7 +48,12 @@ Debug mode is off by default. Turning it on will enable verbose logging in your 
 
 ![debug](http://i.imgur.com/W7LUW.png)
 
-The **board** object is an EventEmitter. You can listen for `connected`, `data` and `message`. Data is a raw output from the serial port. Message is emitted after a newline is encountered and is just a vanity funtion.
+The **board** object is an EventEmitter. You can listen for the following events:
+
+* `data` raw output from the serial port
+* `message` on newline, emits all data since the last newline
+* `connected` when the serial port has connected
+* `ready` when all internal post-connection logic has finished and the board is ready to use
 
 ````javascript
 board.on('connected', function(){
