@@ -4,6 +4,7 @@ int index = 0;
 char cmd[3];
 char pin[3];
 char val[3];
+bool debug = false;
 
 void setup() {
   Serial.begin(9600);
@@ -31,14 +32,31 @@ void process() {
   strncpy(val, messageBuffer + 4, 2);
   val[2] = '\0';
   
+  //if (debug) {
+    Serial.println(messageBuffer);
+  //}
+  
   if (strcmp(cmd, "00") == 0) {
       sm(pin, val);
   } else if (strcmp(cmd, "01") == 0) {
       dw(pin, val);
   } else if (strcmp(cmd, "02") == 0) {
       dr(pin, val);
+  } else if (strcmp(cmd, "99") == 0) {
+      toggleDebug(val);
+  }
+}
+
+/*
+ * Toggle debug mode
+ */
+void toggleDebug(char *val) {
+  if (strcmp(val, "00") == 0) {
+    debug = false;
+    Serial.println("goodbye");
   } else {
-    Serial.println(messageBuffer);
+    debug = true;
+    Serial.println("hello");
   }
 }
 
@@ -46,6 +64,7 @@ void process() {
  * Set pin mode
  */
 void sm(char *pin, char *val) {
+  if (debug) Serial.println("sm");
   int p = atoi(pin);
   if (strcmp(val, "00") == 0) pinMode(p, OUTPUT);
   else pinMode(p, INPUT);
@@ -55,6 +74,7 @@ void sm(char *pin, char *val) {
  * Digital write
  */
 void dw(char *pin, char *val) {
+  if (debug) Serial.println("dw");
   int p = atoi(pin);
   pinMode(p, OUTPUT);
   if (strcmp(val, "00") == 0) digitalWrite(p, LOW);
