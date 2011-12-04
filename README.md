@@ -56,8 +56,8 @@ The **board** object is an EventEmitter. You can listen for the following events
 * `ready` when all internal post-connection logic has finished and the board is ready to use
 
 ````javascript
-board.on('connected', function(){
-  console.log('Connected!');
+board.on('ready', function(){
+  // do stuff
 });
 
 board.on('message', function(m){
