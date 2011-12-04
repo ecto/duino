@@ -71,7 +71,7 @@ Low-level access to the serial connection to the board
 
 ###board.write(msg)
 
-Write a message to the board using predefined delimiters
+Write a message to the board, wrapped in predefined delimiters (! and .)
 
 ###board.pinMode(pin, mode)
 
