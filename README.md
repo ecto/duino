@@ -181,6 +181,8 @@ What is implemented right now:
 
 *  `00` pinMode
 *  `01` digitalWrite
+*  `02` digitalRead
+*  `99` debug
 
 ##pin
 
