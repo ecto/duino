@@ -46,7 +46,7 @@ var board = new arduino.Board({
 
 Debug mode is off by default. Turning it on will enable verbose logging in your terminal, and tell the Arduino board to echo everthing back to you. You will get something like this:
 
-![debug](http://i.imgur.com/W7LUW.png)
+![debug](http://i.imgur.com/gBYZA.png)
 
 The **board** object is an EventEmitter. You can listen for the following events:
 
@@ -131,6 +131,27 @@ Write a square wave to the piezo element.
 `tone` and `duration` must be integers. See code comments for math on `tone` generation.
 
 ##button
+
+````javascript
+var button = new arduino.Button({
+  board: board,
+  pin: 13
+});
+````
+Pin will default to 13.
+
+Buttons are simply EventEmitters. They will emit the events `up` and `down`. You may also access their `down` property.
+
+````javascript
+button.on('down', function(){
+  // delete the database!
+  console.log('BOOM');
+});
+
+setInterval(function(){
+  console.log(button.down);
+}, 1000);
+````
 
 ##servo
 
