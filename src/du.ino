@@ -32,9 +32,9 @@ void process() {
   strncpy(val, messageBuffer + 4, 2);
   val[2] = '\0';
   
-  //if (debug) {
+  if (debug) {
     Serial.println(messageBuffer);
-  //}
+  }
   
   if (strcmp(cmd, "00") == 0) {
       sm(pin, val);
