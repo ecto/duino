@@ -50,8 +50,7 @@ Debug mode is off by default. Turning it on will enable verbose logging in your 
 
 The **board** object is an EventEmitter. You can listen for the following events:
 
-* `data` raw output from the serial port
-* `message` on newline, emits all data since the last newline
+* `data` messages from the serial port, delimited by newlines
 * `connected` when the serial port has connected
 * `ready` when all internal post-connection logic has finished and the board is ready to use
 
@@ -60,7 +59,7 @@ board.on('ready', function(){
   // do stuff
 });
 
-board.on('message', function(m){
+board.on('data', function(m){
   console.log(m);
 }
 ````
