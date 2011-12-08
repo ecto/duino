@@ -66,8 +66,11 @@ void toggleDebug(char *val) {
 void sm(char *pin, char *val) {
   if (debug) Serial.println("sm");
   int p = atoi(pin);
-  if (strcmp(val, "00") == 0) pinMode(p, OUTPUT);
-  else pinMode(p, INPUT);
+  if (strcmp(val, "00") == 0) {
+    pinMode(p, OUTPUT);
+  } else {
+    pinMode(p, INPUT);
+  }
 }
 
 /*
@@ -77,12 +80,27 @@ void dw(char *pin, char *val) {
   if (debug) Serial.println("dw");
   int p = atoi(pin);
   pinMode(p, OUTPUT);
-  if (strcmp(val, "00") == 0) digitalWrite(p, LOW);
-  else digitalWrite(p, HIGH);
+  if (strcmp(val, "00") == 0) {
+    digitalWrite(p, LOW);
+  } else {
+    digitalWrite(p, HIGH);
+  }
 }
 
 /*
  * Digital read
  */
-void dr(char *pin, char *val) {}
+void dr(char *pin, char *val) {
+  if (debug) Serial.println("dr");
+  int p = atoi(pin);
+  pinMode(p, INPUT);
+  int oraw = digitalRead(p);
+  char m[4];
+  char out[4];
+  sprintf(m, "%d", p);
+  sprintf(out, "%d", oraw);
+  strcat(m, "::");
+  strcat(m, out);
+  Serial.println(m);
+}
 
