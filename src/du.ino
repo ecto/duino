@@ -1,10 +1,13 @@
+#include <Servo.h>
 
-char messageBuffer[6];
+char messageBuffer[11];
 int index = 0;
 char cmd[3];
 char pin[3];
 char val[3];
+char aux[4];
 bool debug = false;
+Servo servo;
 
 void setup() {
   Serial.begin(115200);
@@ -31,6 +34,8 @@ void process() {
   pin[2] = '\0';
   strncpy(val, messageBuffer + 4, 2);
   val[2] = '\0';
+  strncpy(aux, messageBuffer + 6, 3);
+  aux[2] = '\0';
   
   if (debug) {
     Serial.println(messageBuffer);
@@ -39,9 +44,11 @@ void process() {
   if (strcmp(cmd, "00") == 0) {
       sm(pin, val);
   } else if (strcmp(cmd, "01") == 0) {
-      dw(pin, val);
+      dw(pin, val); // digital write
   } else if (strcmp(cmd, "02") == 0) {
-      dr(pin, val);
+      dr(pin, val); //  digital read
+  } else if (strcmp(cmd, "98") == 0) {
+      handleServo(pin, val, aux);
   } else if (strcmp(cmd, "99") == 0) {
       toggleDebug(val);
   }
@@ -104,3 +111,22 @@ void dr(char *pin, char *val) {
   Serial.println(m);
 }
 
+/*
+ * Handle Servo commands
+ * attach, detach, write, read, writeMicroseconds, attached
+ */
+void handleServo(char *pin, char *val, char *aux) {
+  if (debug) Serial.println("ss");
+  int p = atoi(pin);
+  Serial.println("got signal");
+  if (strcmp(val, "00") == 0) {
+    servo.detach();
+  } else if (strcmp(val, "01") == 0) {
+    servo.attach(p);
+    Serial.println("attached");
+  } else if (strcmp(val, "02") == 0) {
+    Serial.println("writing to servo");
+    Serial.println(atoi(aux));
+    servo.write(atoi(aux));
+  }
+}
