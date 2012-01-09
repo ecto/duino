@@ -155,9 +155,8 @@ setInterval(function(){
 ##servo
 
 ````javascript
-var button = new arduino.Button({
-  board: board,
-  pin: 13
+var servo = new arduino.Servo({
+  board: board
 });
 
 servo.write(0);
@@ -171,7 +170,7 @@ Increment position from 0 to 180.
 
 ###servo.write(pos)
 
-Instruct the servo toi immediately go to a position from 0 to 180.
+Instruct the servo to immediately go to a position from 0 to 180.
 
 ##motor
 
