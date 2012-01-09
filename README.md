@@ -154,6 +154,25 @@ setInterval(function(){
 
 ##servo
 
+````javascript
+var button = new arduino.Button({
+  board: board,
+  pin: 13
+});
+
+servo.write(0);
+servo.write(180);
+````
+Pin will default to 9. (Arduino PWM default)
+
+###servo.sweep()
+
+Increment position from 0 to 180.
+
+###servo.write(pos)
+
+Instruct the servo toi immediately go to a position from 0 to 180.
+
 ##motor
 
 ##potentiometer
