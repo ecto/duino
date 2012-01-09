@@ -35,7 +35,7 @@ void process() {
   strncpy(val, messageBuffer + 4, 2);
   val[2] = '\0';
   strncpy(aux, messageBuffer + 6, 3);
-  aux[2] = '\0';
+  aux[3] = '\0';
   
   if (debug) {
     Serial.println(messageBuffer);
