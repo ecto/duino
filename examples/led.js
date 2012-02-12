@@ -6,9 +6,15 @@ var board = new arduino.Board({
 
 var led = new arduino.Led({
   board: board,
-  pin: 13
+  pin: 9
 });
+
+/*var aled = new arduino.Led({
+	board: board,
+	pin: 9
+});*/
 
 board.on('ready', function(){
   led.blink();
+  //aled.fade();
 });
