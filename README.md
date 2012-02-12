@@ -84,6 +84,10 @@ Write one of the following to a pin:
 
 Constants for use in low-level digital writes
 
+###board.analogWrite(pin,val)
+
+Write a value between 0-255 to a pin
+
 ##led
 
 ````javascript
@@ -106,6 +110,14 @@ Turn the LED off
 ###led.blink(interval)
 
 Blink the LED at `interval` ms. Defaults to 1000
+
+###led.fade(interval)
+
+Fade the to full brightness then back to minimal brightness in `interval` ms. Defaults to 2000
+
+###led.bright
+
+Current brightness of the LED
 
 ##piezo
 
@@ -182,12 +194,12 @@ Each message sent to the Arduino board by the **board** class has 8 bytes.
 
 A full message looks like this:
 
-    !011301.
+    !0113001.
 
 `!` Start
 `01` Command (digitalWrite)
 `13` Pin number
-`01` Value (high)
+`001` Value (high)
 `.` Stop
 
 I was drunk. It works.
@@ -199,15 +211,19 @@ What is implemented right now:
 *  `00` pinMode
 *  `01` digitalWrite
 *  `02` digitalRead
+*  `03` analogWrite
+*  `04` analogRead
 *  `99` debug
 
 ##pin
 
-I haven't tested analog pins yet. Soon. Digital pins 0-13 tested.
+Pins can be sent as an integer or a string(1, 2, "3", "A0")
 
 ##value
 
-*  `00` low
+*  board.LOW(0)
+*  board.HIGH(255)
+*  integer/string from 0-255 for PWM pins
 *  `01` high
 
 # license
