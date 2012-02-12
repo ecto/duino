@@ -217,14 +217,13 @@ What is implemented right now:
 
 ##pin
 
-Pins can be sent as an integer or a string(1, 2, "3", "A0")
+Pins can be sent as an integer or a string(`1`, `2`, `"3"`, `"A0"`)
 
 ##value
 
-*  board.LOW(0)
-*  board.HIGH(255)
-*  integer/string from 0-255 for PWM pins
-*  `01` high
+*  `board.LOW`(`0`)
+*  `board.HIGH`(`255`)
+*  integer/string from `0`-`255` for PWM pins
 
 # license
 
