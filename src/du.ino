@@ -88,7 +88,7 @@ void dw(char *pin, char *val) {
   if (debug) Serial.println("dw");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
-  //pinMode(p, OUTPUT);
+  pinMode(p, OUTPUT);
   if (atoi(val) == 0) {
     digitalWrite(p, LOW);
   } else {
@@ -103,7 +103,7 @@ void dr(char *pin, char *val) {
   if (debug) Serial.println("dr");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
-  //pinMode(p, INPUT);
+  pinMode(p, INPUT);
   int oraw = digitalRead(p);
   char m[7];
   sprintf(m, "%02d::%02d", p,oraw);
@@ -117,7 +117,7 @@ void ar(char *pin, char *val) {
   if(debug) Serial.println("ar");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
-  //pinMode(p, INPUT); // don't want to sw
+  pinMode(p, INPUT); // don't want to sw
   int rval = analogRead(p);
   char m[8];
   sprintf(m, "%s::%03d", pin, rval);
@@ -127,6 +127,7 @@ void ar(char *pin, char *val) {
 void aw(char *pin, char *val) {
   if(debug) Serial.println("aw");
   int p = getPin(pin);
+  pinMode(p, OUTPUT);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
   analogWrite(p,atoi(val));
 }
