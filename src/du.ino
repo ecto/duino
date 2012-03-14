@@ -27,21 +27,21 @@ void loop() {
  */
 void process() {
   index = 0;
-  
+
   strncpy(cmd, messageBuffer, 2);
   cmd[2] = '\0';
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
-  strncpy(val, messageBuffer + 4, 3);
+  strncpy(val, messageBuffer + 4, 2);
   val[3] = '\0';
-  strncpy(aux, messageBuffer + 7, 3);
+  strncpy(aux, messageBuffer + 6, 3);
   aux[3] = '\0';
-  
+
   if (debug) {
     Serial.println(messageBuffer);
   }
   int cmdid = atoi(cmd);
-  
+
   switch(cmdid) {
     case 0:  sm(pin,val);              break;
     case 1:  dw(pin,val);              break;
@@ -122,7 +122,7 @@ void ar(char *pin, char *val) {
   char m[8];
   sprintf(m, "%s::%03d", pin, rval);
   Serial.println(m);
-}  
+}
 
 void aw(char *pin, char *val) {
   if(debug) Serial.println("aw");
@@ -155,7 +155,7 @@ int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
   }
   return ret;
 }
-  
+
 
 /*
  * Handle Servo commands
