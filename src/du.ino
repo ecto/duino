@@ -179,8 +179,8 @@ void handleServo(char *pin, char *val, char *aux) {
     Serial.println("writing to servo");
     Serial.println(atoi(aux));
 
-    // servo.write(atoi(aux));
-    moveTo( atoi(aux) );
+    servo.write(atoi(aux));
+    // moveTo( atoi(aux) );
 
   } else if (atoi(val) == 3) {
     Serial.println("reading servo");
@@ -189,33 +189,32 @@ void handleServo(char *pin, char *val, char *aux) {
     sprintf(m, "%s::%03d::read", pin, sval);
     Serial.println(m);
   }
-  //delay(15);
 }
 
-// move to the given position
-void moveTo(int pos) {
-  int step = 4;  // decrease this to slow movement
-  int current = servo.read();
-  int movement = pos - current; // the  number of degrees to move
+// // move to the given position
+// void moveTo(int pos) {
+//   int step = 4;  // decrease this to slow movement
+//   int current = servo.read();
+//   int movement = pos - current; // the  number of degrees to move
 
-  Serial.println(movement);
-  if (movement < 0) {
-    while (current > pos) {
-      current = current - step;
-      if (current < pos)
-        current = pos;
+//   Serial.println(movement);
+//   if (movement < 0) {
+//     while (current > pos) {
+//       current = current - step;
+//       if (current < pos)
+//         current = pos;
 
-      servo.write( current);
-      delay(15);
-    }
-  } else {
-    while (current < pos) {
-      current = current + step;
-      if (current > pos)
-        current = pos;
+//       servo.write( current);
+//       delay(15);
+//     }
+//   } else {
+//     while (current < pos) {
+//       current = current + step;
+//       if (current > pos)
+//         current = pos;
 
-      servo.write( current);
-      delay(15);
-    }
-  }
-}
+//       servo.write( current);
+//       delay(15);
+//     }
+//   }
+// }
