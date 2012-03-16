@@ -5,7 +5,18 @@ var board = new arduino.Board({
 });
 
 var servo = new arduino.Servo({
-  board: board
+  board: board,
+  pin: "A0"
 });
 
-servo.sweep();
+
+
+servo.on("attached", function() {
+
+  this.read(function(current) {
+    this.write(180);
+  });
+
+
+
+});
