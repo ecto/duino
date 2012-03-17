@@ -179,7 +179,7 @@ void handleServo(char *pin, char *val, char *aux) {
     sprintf(m, "%s::detached", pin);
     Serial.println(m);
   } else if (atoi(val) == 1) {
-    servo.attach(p, 600, 2200);
+    servo.attach(p, 100, 2200);
     char m[12];
     sprintf(m, "%s::attached", pin);
     Serial.println(m);
