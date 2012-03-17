@@ -1,14 +1,18 @@
 #include <Servo.h>
 
 
-char messageBuffer[12];
+bool debug = false;
+
 int index = 0;
+
+char messageBuffer[12];
 char cmd[3];
 char pin[3];
 char val[4];
 char aux[4];
-bool debug = false;
-int pos = 0;
+
+
+
 Servo servo;
 
 void setup() {
@@ -171,50 +175,29 @@ void handleServo(char *pin, char *val, char *aux) {
 
   if (atoi(val) == 0) {
     servo.detach();
-    Serial.println("detached");
+    char m[12];
+    sprintf(m, "%s::detached", pin);
+    Serial.println(m);
   } else if (atoi(val) == 1) {
-    servo.attach(p);
-    Serial.println("attached");
+    servo.attach(p, 600, 2200);
+    char m[12];
+    sprintf(m, "%s::attached", pin);
+    Serial.println(m);
   } else if (atoi(val) == 2) {
     Serial.println("writing to servo");
     Serial.println(atoi(aux));
-
+    // Write to servo
     servo.write(atoi(aux));
-    // moveTo( atoi(aux) );
 
+    // TODO: Experiment with microsecond pulses
+    // digitalWrite(pin, HIGH);   // start the pulse
+    // delayMicroseconds(pulseWidth);  // pulse width
+    // digitalWrite(pin, LOW);    // stop the pulse
   } else if (atoi(val) == 3) {
     Serial.println("reading servo");
     int sval = servo.read();
     char m[8];
-    sprintf(m, "%s::%03d::read", pin, sval);
+    sprintf(m, "%s::read::%03d", pin, sval);
     Serial.println(m);
   }
 }
-
-// // move to the given position
-// void moveTo(int pos) {
-//   int step = 4;  // decrease this to slow movement
-//   int current = servo.read();
-//   int movement = pos - current; // the  number of degrees to move
-
-//   Serial.println(movement);
-//   if (movement < 0) {
-//     while (current > pos) {
-//       current = current - step;
-//       if (current < pos)
-//         current = pos;
-
-//       servo.write( current);
-//       delay(15);
-//     }
-//   } else {
-//     while (current < pos) {
-//       current = current + step;
-//       if (current > pos)
-//         current = pos;
-
-//       servo.write( current);
-//       delay(15);
-//     }
-//   }
-// }
