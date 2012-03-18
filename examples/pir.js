@@ -46,6 +46,7 @@ pir.on('calibrated', function(err, date) {
 
 // To test, use the following:
 // http://www.ladyada.net/images/sensors/pirardbb.gif
+// http://bildr.org/blog/wp-content/uploads/2011/06/PIR-Arduino_hookup.png
 //
 // More information:
 // http://www.ladyada.net/learn/sensors/pir.html
