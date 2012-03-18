@@ -11,8 +11,6 @@ char pin[3];
 char val[4];
 char aux[4];
 
-
-
 Servo servo;
 
 void setup() {
@@ -54,6 +52,7 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
+    case 97: handlePing(pin,val,aux);  break;
     case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
     default:                           break;
@@ -162,6 +161,37 @@ int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
   return ret;
 }
 
+/*
+ * Handle Ping commands
+ * fire, read
+ */
+void handlePing(char *pin, char *val, char *aux) {
+  if (debug) Serial.println("ss");
+  int p = getPin(pin);
+
+  if(p == -1) { if(debug) Serial.println("badpin"); return; }
+  Serial.println("got signal");
+
+  // 01(1) Fire and Read
+  if (atoi(val) == 1) {
+    char m[16];
+
+    pinMode(p, OUTPUT);
+    digitalWrite(p, LOW);
+    delayMicroseconds(2);
+    digitalWrite(p, HIGH);
+    delayMicroseconds(5);
+    digitalWrite(p, LOW);
+
+    Serial.println("ping fired");
+
+    pinMode(p, INPUT);
+    sprintf(m, "%s::read::%08d", pin, pulseIn(p, HIGH));
+    Serial.println(m);
+
+    delay(50);
+  }
+}
 
 /*
  * Handle Servo commands
@@ -173,16 +203,21 @@ void handleServo(char *pin, char *val, char *aux) {
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
   Serial.println("got signal");
 
+  // 00(0) Detach
   if (atoi(val) == 0) {
     servo.detach();
     char m[12];
     sprintf(m, "%s::detached", pin);
     Serial.println(m);
+
+  // 01(1) Attach
   } else if (atoi(val) == 1) {
     servo.attach(p, 100, 2200);
     char m[12];
     sprintf(m, "%s::attached", pin);
     Serial.println(m);
+
+  // 02(2) Write
   } else if (atoi(val) == 2) {
     Serial.println("writing to servo");
     Serial.println(atoi(aux));
@@ -193,10 +228,12 @@ void handleServo(char *pin, char *val, char *aux) {
     // digitalWrite(pin, HIGH);   // start the pulse
     // delayMicroseconds(pulseWidth);  // pulse width
     // digitalWrite(pin, LOW);    // stop the pulse
+
+  // 03(3) Read
   } else if (atoi(val) == 3) {
     Serial.println("reading servo");
     int sval = servo.read();
-    char m[8];
+    char m[13];
     sprintf(m, "%s::read::%03d", pin, sval);
     Serial.println(m);
   }
