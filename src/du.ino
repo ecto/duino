@@ -223,6 +223,7 @@ void handleServo(char *pin, char *val, char *aux) {
     Serial.println(atoi(aux));
     // Write to servo
     servo.write(atoi(aux));
+    delay(15);
 
     // TODO: Experiment with microsecond pulses
     // digitalWrite(pin, HIGH);   // start the pulse

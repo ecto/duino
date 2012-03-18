@@ -11,7 +11,7 @@ ping = new arduino.Ping({
 });
 
 // 'read' events fire approx ~50ms
-ping.on('read', function() {
+ping.on('read', function(err) {
 
   // Current sensor data stored in properties
   // of this Ping instance:

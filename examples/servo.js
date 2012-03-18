@@ -28,18 +28,18 @@ servo = new arduino.Servo({
 //
 //  - execute full sweep
 
-servo.on('attached', function() {
+servo.on('attached', function(err) {
   console.log('attached');
 
-  this.on('read', function(pos) {
+  this.on('read', function(err, pos) {
     console.log(pos);
   });
 
-  this.on('detached', function() {
+  this.on('detached', function(err) {
     console.log('detached');
   });
 
-  this.on('aftersweep', function() {
+  this.on('aftersweep', function(err) {
     led.blink();
 
     this.read();
@@ -48,3 +48,9 @@ servo.on('attached', function() {
 
   this.sweep();
 });
+
+// To test, use the following:
+// http://arduino.cc/en/uploads/Tutorial/sweep_BB.png
+//
+// More information:
+// http://www.ladyada.net/learn/sensors/pir.html

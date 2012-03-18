@@ -10,7 +10,7 @@ ldr = new arduino.Sensor({
   pin: 'A0'
 });
 
-ldr.on('read', function(value) {
+ldr.on('read', function(err, value) {
 
   // |value| is reading of the light dependent resistor
   console.log(value);
