@@ -36,15 +36,29 @@ void process() {
   cmd[2] = '\0';
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
-  strncpy(val, messageBuffer + 4, 2);
-  val[3] = '\0';
-  strncpy(aux, messageBuffer + 6, 3);
-  aux[3] = '\0';
+
+  if (atoi(cmd) > 90) {
+    Serial.println("tesT");
+    strncpy(val, messageBuffer + 4, 2);
+    val[2] = '\0';
+    strncpy(aux, messageBuffer + 6, 3);
+    aux[3] = '\0';
+  } else {
+    strncpy(val, messageBuffer + 4, 3);
+    val[4] = '\0';
+    strncpy(aux, messageBuffer + 7, 3);
+    aux[4] = '\0';
+  }
 
   if (debug) {
     Serial.println(messageBuffer);
   }
   int cmdid = atoi(cmd);
+
+  // Serial.println(cmd);
+  // Serial.println(pin);
+  // Serial.println(val);
+  // Serial.println(aux);
 
   switch(cmdid) {
     case 0:  sm(pin,val);              break;
@@ -139,10 +153,8 @@ void aw(char *pin, char *val) {
 
 int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
   int ret = -1;
-  if(pin[0] == 'A' || pin[0] == 'a')
-  {
-    switch(pin[1])
-    {
+  if(pin[0] == 'A' || pin[0] == 'a') {
+    switch(pin[1]) {
       case '0':  ret = A0; break;
       case '1':  ret = A1; break;
       case '2':  ret = A2; break;
@@ -153,8 +165,7 @@ int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
     }
   } else {
     ret = atoi(pin);
-    if(ret == 0 && (pin[0] != '0' || pin[1] != '0'))
-    {
+    if(ret == 0 && (pin[0] != '0' || pin[1] != '0')) {
       ret = -1;
     }
   }
@@ -201,7 +212,7 @@ void handleServo(char *pin, char *val, char *aux) {
   if (debug) Serial.println("ss");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
-  Serial.println("got signal");
+  Serial.println("signal: servo");
 
   // 00(0) Detach
   if (atoi(val) == 0) {
@@ -212,7 +223,8 @@ void handleServo(char *pin, char *val, char *aux) {
 
   // 01(1) Attach
   } else if (atoi(val) == 1) {
-    servo.attach(p, 100, 2200);
+    // servo.attach(p, 750, 2250);
+    servo.attach(p);
     char m[12];
     sprintf(m, "%s::attached", pin);
     Serial.println(m);
@@ -223,6 +235,7 @@ void handleServo(char *pin, char *val, char *aux) {
     Serial.println(atoi(aux));
     // Write to servo
     servo.write(atoi(aux));
+    delay(15);
 
     // TODO: Experiment with microsecond pulses
     // digitalWrite(pin, HIGH);   // start the pulse
