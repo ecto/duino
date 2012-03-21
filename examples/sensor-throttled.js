@@ -1,19 +1,30 @@
 var arduino = require('../'),
-    board, sensor;
+    board, sensor, piezo;
 
 board = new arduino.Board({
-  debug: true
+  debug: false
 });
 
 sensor = new arduino.Sensor({
   board: board,
-  pin: 'A0'
+  pin: 'A0',
+  throttle: 100
+});
+
+piezo = new arduino.Piezo({
+  board: board,
+  pin: 11
 });
 
 sensor.on('read', function(err, value) {
   value = +value;
+
   // |value| is the raw sensor output
   console.log( value );
+
+  if ( value > 0 ) {
+    piezo.note('b', 100);
+  }
 });
 
 // Tested with:
