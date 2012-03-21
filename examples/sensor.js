@@ -1,18 +1,18 @@
 var arduino = require('../'),
-    board, ldr;
+    board, sensor;
 
 board = new arduino.Board({
   debug: true
 });
 
-ldr = new arduino.Sensor({
+sensor = new arduino.Sensor({
   board: board,
   pin: 'A0'
 });
 
-ldr.on('read', function(value) {
-
-  // |value| is reading of the light dependent resistor
+sensor.on('read', function(err, value) {
+  value = +value;
+  // |value| is current reading of sensor
   console.log(value);
 });
 
@@ -21,5 +21,5 @@ ldr.on('read', function(value) {
 //  http://www.spectrasymbol.com/how-it-works-softpot
 //  http://www.sparkfun.com/datasheets/Sensors/Flex/SoftPot-Datasheet.pdf
 //
-// LDR
+// sensor
 //  http://www.ladyada.net/learn/sensors/cds.html
