@@ -38,7 +38,6 @@ void process() {
   pin[2] = '\0';
 
   if (atoi(cmd) > 90) {
-    Serial.println("tesT");
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
     strncpy(aux, messageBuffer + 6, 3);
