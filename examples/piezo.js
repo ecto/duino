@@ -15,3 +15,7 @@ board.on('ready', function(){
     piezo.note('b', 1100);
   }, 1000);
 });
+
+
+// Resources
+//  http://arduino.cc/en/Tutorial/Tone4
