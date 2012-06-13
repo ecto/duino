@@ -2,11 +2,12 @@
   "author": "Cam Pedersen <diffference@gmail.com> (http://campedersen.com/)",
   "contributors": [
     { "name": "Rick Waldron", "email": "waldron.rick@gmail.com" },
-    { "name": "Leonhardt Wille", "email": "wille@riverlabs.de" }
+    { "name": "Leonhardt Wille", "email": "wille@riverlabs.de" },
+    { "name": "Seiya Konno", "email": "nulltask@gmail.com" }
   ],
   "name": "duino",
   "description": "Arduino framework for mad scientists",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "keywords": [
     "arduino",
     "serial",
