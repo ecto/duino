@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/ecto/duino.png)](http://travis-ci.org/ecto/duino)
 # duino
 
 A framework for working with Arduinos in node.js
