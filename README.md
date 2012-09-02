@@ -36,7 +36,14 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 ##board
 
-Right now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.
+````javascript
+var board = new arduino.Board({
+  device: "ACM"
+});
+````
+The 'device' wich arduino is attached on. 
+Here you can set the exact device (ex. ttyACM0 in my case) or the initial part of it (ex ttyACM)
+If this parameter is empty the board library will attempt to autodiscover the Arduino by quering every usb device (not the ttyACM*)
 
 ````javascript
 var board = new arduino.Board({
