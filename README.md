@@ -41,9 +41,11 @@ var board = new arduino.Board({
   device: "ACM"
 });
 ````
-The 'device' wich arduino is attached on. 
-Here you can set the exact device (ex. `ttyACM0` in my case) or the initial part of it (ex `ttyACM`)
-If this parameter is empty the board library will attempt to autodiscover the Arduino by quering every usb device (not the `ttyACM*`)
+The board library will attempt to autodiscover the Arduino.
+The `device` option can be used to set a regex filter that will help the library when scanning for matching devices.
+**Note**: the value of this parameter will be used as argument of the grep command
+
+If this parameter is not provided the board library will attempt to autodiscover the Arduino by quering every device containing 'usb' in its name.
 
 ````javascript
 var board = new arduino.Board({
