@@ -164,6 +164,20 @@ setInterval(function(){
 }, 1000);
 ````
 
+##ping
+
+See: <http://arduino.cc/en/Tutorial/Ping>
+
+````javascript
+var range = new arduino.Ping({
+  board: board
+});
+
+range.on('read', function () {
+  console.log("Distance to target (cm)", range.centimeters);
+});
+````
+
 ##servo
 
 ````javascript
@@ -213,6 +227,8 @@ What is implemented right now:
 *  `02` digitalRead
 *  `03` analogWrite
 *  `04` analogRead
+*  `97` ping
+*  `98` servo
 *  `99` debug
 
 ##pin
