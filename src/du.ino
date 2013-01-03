@@ -1,5 +1,4 @@
 #include <Servo.h>
-#include <LiquidCrystal.h>
 
 
 bool debug = false;
@@ -66,7 +65,6 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
-    case 89: handleLCD(messageBuffer); break;
     case 97: handlePing(pin,val,aux);  break;
     case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
@@ -171,101 +169,6 @@ int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
     }
   }
   return ret;
-}
-
-/*
- * Handle LiquidCrystal commands
- *
- */
-void handleLCD(char *messageBuffer) {
-  static LiquidCrystal *lcd = NULL;
-  
-  uint8_t *msg = (uint8_t *)messageBuffer;
-  uint8_t cmd = msg[0];
-  if (cmd && !lcd) { if(debug) Serial.println("notready"); return; }
-  
-  // 0 init
-  if (cmd == 0) {
-    int p00, p01, p02, p03, p04, p05, p06, p07, p08, p09, p10, p11;
-    p00 = msg[1] >> 4;
-    if (!p00) lcd = new LiquidCrystal(12, 11, 5, 4, 3, 2);
-    else {
-      p01 = msg[1] & 0xF;
-      p02 = msg[2] >> 4;
-      p03 = msg[2] & 0xF;
-      p04 = msg[3] >> 4;
-      p05 = msg[3] & 0xF;
-      p06 = msg[4] >> 4;
-      if (!p06) lcd = new LiquidCrystal(p00, p01, p02, p03, p04, p05);
-      else {
-        p07 = msg[4] & 0xF;
-        if (!p07) lcd = new LiquidCrystal(p00, p01, p02, p03, p04, p05, p06);
-        else {
-          p08 = msg[5] >> 4;
-          p09 = msg[5] & 0xF;
-          p10 = msg[6] >> 4;
-          //p11 = msg[6] & 0xF;      // extra
-          if (!p10) lcd = new LiquidCrystal(p00, p01, p02, p03, p04, p05, p06, p07, p08, p09);
-          else lcd = new LiquidCrystal(p00, p01, p02, p03, p04, p05, p06, p07, p08, p09, p10);
-        }
-      }
-    }
-    
-  // 1 begin
-  } else if (cmd == 1) {
-    lcd->begin(msg[1], msg[2]);
-  
-  // 2 clear
-  } else if (cmd == 2) {
-    lcd->clear();
-  
-  // 3 home
-  } else if (cmd == 3) {
-    lcd->home();
-    
-  // 4 setCursor
-  } else if (cmd == 4) {
-    lcd->setCursor(atoi(val), atoi(aux));
-  
-  // 5 write
-  } else if (cmd == 5) {
-    char writeBuffer[7];
-    strncpy(writeBuffer, val, 3);
-    strncpy(writeBuffer, aux, 3);
-    writeBuffer[6] = '\0';
-    lcd->write(writeBuffer);
-    
-  // 6 cursor on/off
-  } else if (cmd == 6) {
-    if (val[1] == 'n') lcd->cursor();
-    else lcd->noCursor();
-  
-  // 7 blink on/off
-  } else if (cmd == 7) {
-    if (val[1] == 'n') lcd->blink();
-    else lcd->noBlink();
-  
-  // 8 display on/off
-  } else if (cmd == 8) {
-    if (val[1] == 'n') lcd->display();
-    else lcd->noDisplay();
-  
-  // 9 scroll left/right, autoscroll on/off
-  } else if (cmd == 9) {
-    if (val[0] == 'l') lcd->scrollDisplayLeft();
-    else if (val[0] == 'r') lcd->scrollDisplayRight();
-    else if (val[1] == 'n') lcd->autoscroll();
-    else lcd->noAutoscroll();
-  
-  // A text and autoscroll ltr/rtl
-  } else if (cmd == 'A') {
-    if (val[0] == 'r') lcd->rightToLeft();
-    else lcd->leftToRight();
-  
-  // B createChar 
-  } else if (cmd == 'B') {
-    lcd->createChar(msg[1], msg+2);      // TDB: need 8 byte aux!
-  }
 }
 
 /*
