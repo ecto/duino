@@ -44,9 +44,9 @@ void process() {
     aux[3] = '\0';
   } else {
     strncpy(val, messageBuffer + 4, 3);
-    val[4] = '\0';
+    val[3] = '\0';
     strncpy(aux, messageBuffer + 7, 3);
-    aux[4] = '\0';
+    aux[3] = '\0';
   }
 
   if (debug) {
