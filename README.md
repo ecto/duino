@@ -189,7 +189,7 @@ Instruct the servo to immediately go to a position from 0 to 180.
 There are 4 events to handle ups/downs on X and Y axis.
 
 ````javascript
-var stick = new arduino.JoyStick({
+var joystick = new arduino.JoyStick({
   board: board
 });
 
@@ -213,7 +213,7 @@ joystick.on('x-down',function(amount,real_volts){
 VRYPin is by default A0, VRXPin  is by default A1, but they can be specified in the options:
 
 ````javascript
-var stick = new arduino.JoyStick({
+var joystick = new arduino.JoyStick({
   board: board,
   vrypin: 'A0',
   vrxpin: 'A1'
