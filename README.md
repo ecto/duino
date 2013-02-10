@@ -184,6 +184,53 @@ Increment position from 0 to 180.
 
 Instruct the servo to immediately go to a position from 0 to 180.
 
+##joystick
+
+There are 4 events to handle ups/downs on X and Y axis.
+
+````javascript
+var joystick = new arduino.JoyStick({
+  board: board
+});
+
+joystick.on('y-up',function(amount,real_volts){
+    console.log('Y Increasing, amount:',amount,real_volts);
+});
+
+joystick.on('y-down',function(amount,real_volts){
+  console.log('Y Decreasing , amount:',amount,real_volts);
+});
+
+joystick.on('x-up',function(amount,real_volts){
+  console.log('X Increasing , amount:',amount,real_volts);
+});
+
+joystick.on('x-down',function(amount,real_volts){
+  console.log('X Decreasing , amount:',amount,real_volts);
+});
+
+````
+VRYPin is by default A0, VRXPin  is by default A1, but they can be specified in the options:
+
+````javascript
+var joystick = new arduino.JoyStick({
+  board: board,
+  vrypin: 'A0',
+  vrxpin: 'A1'
+});
+
+````
+Each event returns 2 parameters: "amount" that is a percentage and "real_voltage":
+
+````javascript
+
+joystick.on('x-down',function(amount,real_volts){
+  console.log('X Decreasing , amount:',amount,real_volts);
+});
+
+````
+
+
 ##motor
 
 ##potentiometer
