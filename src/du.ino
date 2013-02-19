@@ -1,14 +1,14 @@
 #include <Servo.h>
-
+#include "RCSwitch.h"
 
 bool debug = false;
 
 int index = 0;
 
-char messageBuffer[12];
+char messageBuffer[18];
 char cmd[3];
 char pin[3];
-char val[4];
+char val[13];
 char aux[4];
 
 Servo servo;
@@ -37,7 +37,15 @@ void process() {
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
 
-  if (atoi(cmd) > 90) {
+  if (debug) {
+    Serial.println(messageBuffer);
+  }
+  int cmdid = atoi(cmd);
+
+  if (cmdid == 96) {
+    strncpy(val, messageBuffer + 4, 12);
+    val[12] = '\0';
+  } else if (cmdid > 90) {
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
     strncpy(aux, messageBuffer + 6, 3);
@@ -48,11 +56,6 @@ void process() {
     strncpy(aux, messageBuffer + 7, 3);
     aux[4] = '\0';
   }
-
-  if (debug) {
-    Serial.println(messageBuffer);
-  }
-  int cmdid = atoi(cmd);
 
   // Serial.println(cmd);
   // Serial.println(pin);
@@ -65,6 +68,7 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
+    case 96: handleRCTriState(pin, val); break;
     case 97: handlePing(pin,val,aux);  break;
     case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
@@ -236,11 +240,6 @@ void handleServo(char *pin, char *val, char *aux) {
     servo.write(atoi(aux));
     delay(15);
 
-    // TODO: Experiment with microsecond pulses
-    // digitalWrite(pin, HIGH);   // start the pulse
-    // delayMicroseconds(pulseWidth);  // pulse width
-    // digitalWrite(pin, LOW);    // stop the pulse
-
   // 03(3) Read
   } else if (atoi(val) == 3) {
     Serial.println("reading servo");
@@ -249,4 +248,17 @@ void handleServo(char *pin, char *val, char *aux) {
     sprintf(m, "%s::read::%03d", pin, sval);
     Serial.println(m);
   }
+}
+
+/*
+ * Handle RC commands
+ * handleRCTriState("10", "0FFF0FFFFF0F")
+ */
+void handleRCTriState(char *pin, char *val) {
+  int p = getPin(pin);
+  if(p == -1) { if(debug) Serial.println("badpin"); return; }
+  if (debug) Serial.println("RC");
+  RCSwitch rc = RCSwitch();
+  rc.enableTransmit(p);
+  rc.sendTriState(val);
 }

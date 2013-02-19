@@ -7,5 +7,6 @@ module.exports = {
   Servo:  require('./lib/servo'),
   Sensor: require('./lib/sensor'),
   Ping:   require('./lib/ping'),
-  PIR:    require('./lib/pir')
+  PIR:    require('./lib/pir'),
+  RC:     require('./lib/rc')
 };
