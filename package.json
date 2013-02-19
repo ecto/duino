@@ -6,11 +6,13 @@
     { "name": "Seiya Konno", "email": "nulltask@gmail.com" },
     { "name": "Nathan Vander Wilt", "email": "nate@calftrail.com" },
     { "name": "Adam Brault (&yet)", "email": "contact@andyet.com" },
-    { "name": "Emanuele Tessore", "email": "setola@gmail.com" }
+    { "name": "Emanuele Tessore", "email": "setola@gmail.com" },
+    { "name": "Willi Thiel", "email": "ni-c@ni-c.de" },
+    { "name": "Tom Janson", "email": "priv.tom.janson+duino@gmail.com" }
   ],
   "name": "duino",
   "description": "Arduino framework for mad scientists",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "keywords": [
     "arduino",
     "serial",
