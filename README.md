@@ -61,7 +61,7 @@ board.on('ready', function(){
 
 board.on('data', function(m){
   console.log(m);
-}
+});
 ````
 
 ###board.serial
