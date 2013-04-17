@@ -64,7 +64,7 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
-    case 5:  handleRFReceive(pin,val);  break;
+    case 5:  rfr(pin,val);             break;
     case 97: handlePing(pin,val,aux);  break;
     case 99: toggleDebug(val);         break;
     default:                           break;
@@ -149,6 +149,39 @@ void aw(char *pin, char *val) {
   analogWrite(p,atoi(val));
 }
 
+
+/*
+ * Digital RF read
+ */
+void rfr(char *pin, char *val) {
+  if (debug) Serial.println("rfr");
+  int p = getPin(pin);
+  if(p == -1) { if(debug) Serial.println("badpin"); return; }
+
+  vw_set_rx_pin(getPin(pin));
+  vw_rx_start();       // Start the receiver PLL running
+
+  int receiving = true;
+  while (receiving) {
+    uint8_t buf[VW_MAX_MESSAGE_LEN];
+    uint8_t buflen = VW_MAX_MESSAGE_LEN;
+
+    if (vw_get_message(buf, &buflen)) // Non-blocking
+    {
+      int i;
+
+      // Message with a good checksum received, dump it.
+      Serial.print("Got: ");
+      Serial.print((char*)buf);
+
+      char m[VW_MAX_MESSAGE_LEN];
+      sprintf(m, "%02d::%02d", p, (char*)buf);
+      Serial.println(m);
+      receiving = false;
+    }
+  }
+}
+
 int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
   int ret = -1;
   if(pin[0] == 'A' || pin[0] == 'a') {
@@ -201,36 +234,3 @@ void handlePing(char *pin, char *val, char *aux) {
     delay(50);
   }
 }
-
-/*
- * Digital read
- */
-void handleRFReceive(char *pin, char *val) {
-  if (debug) Serial.println("handleRCReceive");
-  int p = getPin(pin);
-  if(p == -1) { if(debug) Serial.println("badpin"); return; }
-
-  vw_set_rx_pin(getPin(pin));
-  vw_rx_start();       // Start the receiver PLL running
-
-  int receiving = true;
-  while (receiving) {
-    uint8_t buf[VW_MAX_MESSAGE_LEN];
-    uint8_t buflen = VW_MAX_MESSAGE_LEN;
-
-    if (vw_get_message(buf, &buflen)) // Non-blocking
-    {
-      int i;
-
-      // Message with a good checksum received, dump it.
-      Serial.print("Got: ");
-      Serial.print((char*)buf);
-
-      char m[VW_MAX_MESSAGE_LEN];
-      sprintf(m, "%02d::%02d", p, (char*)buf);
-      Serial.println(m);
-      receiving = false;
-    }
-  }
-}
-
