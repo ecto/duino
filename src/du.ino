@@ -1,5 +1,4 @@
-#include <Servo.h>
-
+#include <VirtualWire.h>
 
 bool debug = false;
 
@@ -11,10 +10,10 @@ char pin[3];
 char val[4];
 char aux[4];
 
-Servo servo;
-
 void setup() {
   Serial.begin(115200);
+  vw_set_ptt_inverted(true); // Required for DR3100
+  vw_setup(2000);  // Bits per sec
 }
 
 void loop() {
@@ -65,8 +64,8 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
+    case 5:  handleRFReceive(pin,val);  break;
     case 97: handlePing(pin,val,aux);  break;
-    case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
     default:                           break;
   }
@@ -204,49 +203,34 @@ void handlePing(char *pin, char *val, char *aux) {
 }
 
 /*
- * Handle Servo commands
- * attach, detach, write, read, writeMicroseconds, attached
+ * Digital read
  */
-void handleServo(char *pin, char *val, char *aux) {
-  if (debug) Serial.println("ss");
+void handleRFReceive(char *pin, char *val) {
+  if (debug) Serial.println("handleRCReceive");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
-  Serial.println("signal: servo");
 
-  // 00(0) Detach
-  if (atoi(val) == 0) {
-    servo.detach();
-    char m[12];
-    sprintf(m, "%s::detached", pin);
-    Serial.println(m);
+  vw_set_rx_pin(getPin(pin));
+  vw_rx_start();       // Start the receiver PLL running
 
-  // 01(1) Attach
-  } else if (atoi(val) == 1) {
-    // servo.attach(p, 750, 2250);
-    servo.attach(p);
-    char m[12];
-    sprintf(m, "%s::attached", pin);
-    Serial.println(m);
+  int receiving = true;
+  while (receiving) {
+    uint8_t buf[VW_MAX_MESSAGE_LEN];
+    uint8_t buflen = VW_MAX_MESSAGE_LEN;
 
-  // 02(2) Write
-  } else if (atoi(val) == 2) {
-    Serial.println("writing to servo");
-    Serial.println(atoi(aux));
-    // Write to servo
-    servo.write(atoi(aux));
-    delay(15);
+    if (vw_get_message(buf, &buflen)) // Non-blocking
+    {
+      int i;
 
-    // TODO: Experiment with microsecond pulses
-    // digitalWrite(pin, HIGH);   // start the pulse
-    // delayMicroseconds(pulseWidth);  // pulse width
-    // digitalWrite(pin, LOW);    // stop the pulse
+      // Message with a good checksum received, dump it.
+      Serial.print("Got: ");
+      Serial.print((char*)buf);
 
-  // 03(3) Read
-  } else if (atoi(val) == 3) {
-    Serial.println("reading servo");
-    int sval = servo.read();
-    char m[13];
-    sprintf(m, "%s::read::%03d", pin, sval);
-    Serial.println(m);
+      char m[VW_MAX_MESSAGE_LEN];
+      sprintf(m, "%02d::%02d", p, (char*)buf);
+      Serial.println(m);
+      receiving = false;
+    }
   }
 }
+
