@@ -10,8 +10,10 @@ char pin[3];
 char val[4];
 char aux[4];
 
+boolean rxStarted = false;
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
 }
@@ -35,7 +37,7 @@ void process() {
   cmd[2] = '\0';
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
-
+  
   if (atoi(cmd) > 90) {
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
@@ -53,10 +55,16 @@ void process() {
   }
   int cmdid = atoi(cmd);
 
-  // Serial.println(cmd);
-  // Serial.println(pin);
-  // Serial.println(val);
-  // Serial.println(aux);
+  if (cmdid == 4) {
+   
+    pinMode(8, OUTPUT);
+    digitalWrite(8, HIGH);  
+ 
+  }
+//  Serial.println(cmd);
+//  Serial.println(pin);
+//  Serial.println(val);
+//  Serial.println(aux);
 
   switch(cmdid) {
     case 0:  sm(pin,val);              break;
@@ -154,31 +162,30 @@ void aw(char *pin, char *val) {
  * Digital RF read
  */
 void rfr(char *pin, char *val) {
+  
   if (debug) Serial.println("rfr");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
 
-  vw_set_rx_pin(getPin(pin));
-  vw_rx_start();       // Start the receiver PLL running
+  if(!rxStarted){
+    vw_set_rx_pin(getPin(pin));
+    vw_rx_start();       // Start the receiver PLL running
+    rxStarted = true;
+  }
+  
+  uint8_t buf[VW_MAX_MESSAGE_LEN];
+  uint8_t buflen = VW_MAX_MESSAGE_LEN;
 
-  int receiving = true;
-  while (receiving) {
-    uint8_t buf[VW_MAX_MESSAGE_LEN];
-    uint8_t buflen = VW_MAX_MESSAGE_LEN;
+  if (vw_get_message(buf, &buflen)) // Non-blocking
+  {
+    int i;
+    
+    Serial.println("Got");
+    Serial.println((char*)buf);
 
-    if (vw_get_message(buf, &buflen)) // Non-blocking
-    {
-      int i;
-
-      // Message with a good checksum received, dump it.
-      Serial.print("Got: ");
-      Serial.print((char*)buf);
-
-      char m[VW_MAX_MESSAGE_LEN];
-      sprintf(m, "%02d::%02d", p, (char*)buf);
-      Serial.println(m);
-      receiving = false;
-    }
+    char m[VW_MAX_MESSAGE_LEN];
+    sprintf(m, "%02d::%s", p, (char*)buf);
+    Serial.println(m);
   }
 }
 
