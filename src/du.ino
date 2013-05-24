@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 
-bool debug = true;
+bool debug = false;
 
 int index = 0;
 
