@@ -1,9 +1,26 @@
 {
-  "author": "Cam Pedersen <diffference@gmail.com> (http://campedersen.com/)",
+  "author": {
+    "name": "Cam Pedersen",
+    "email": "diffference@gmail.com",
+    "url": "http://campedersen.com/"
+  },
   "contributors": [
-    { "name": "Rick Waldron", "email": "waldron.rick@gmail.com" },
-    { "name": "Leonhardt Wille", "email": "wille@riverlabs.de" },
-    { "name": "Seiya Konno", "email": "nulltask@gmail.com" }
+    {
+      "name": "Rick Waldron",
+      "email": "waldron.rick@gmail.com"
+    },
+    {
+      "name": "Leonhardt Wille",
+      "email": "wille@riverlabs.de"
+    },
+    {
+      "name": "Seiya Konno",
+      "email": "nulltask@gmail.com"
+    },
+    {
+      "name": "Nicholas Rushton",
+      "email": "nick.rushton@hotmail.com"
+    }
   ],
   "name": "duino",
   "description": "Arduino framework for mad scientists",
@@ -25,5 +42,9 @@
     "serialport": "*",
     "colors": "*"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "readme": "# duino\n\nA framework for working with Arduinos in node.js\n\n![arduino](http://i.imgur.com/eFq84.jpg)\n\n# install\n\n    npm install duino\n\n# usage\n\n````javascript\nvar arduino = require('duino'),\n    board = new arduino.Board();\n\nvar led = new arduino.Led({\n  board: board,\n  pin: 13\n});\n\nled.blink();\n````\n\n# what ಠ_ಠ\n\nThe way this works is simple (in theory, not in practice). The Arduino listens for low-level signals over a serial port, while we abstract all of the logic on the Node side.\n\n1.  Plug in your Arduino\n2.  Upload the C code at `./src/du.ino` to it\n3.  Write a simple **duino** script\n4.  ?????\n5.  Profit!\n\n# libraries\n\n##board\n\nRight now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.\n\n````javascript\nvar board = new arduino.Board({\n  debug: true\n});\n````\n\nDebug mode is off by default. Turning it on will enable verbose logging in your terminal, and tell the Arduino board to echo everthing back to you. You will get something like this:\n\n![debug](http://i.imgur.com/gBYZA.png)\n\nThe **board** object is an EventEmitter. You can listen for the following events:\n\n* `data` messages from the serial port, delimited by newlines\n* `connected` when the serial port has connected\n* `ready` when all internal post-connection logic has finished and the board is ready to use\n\n````javascript\nboard.on('ready', function(){\n  // do stuff\n});\n\nboard.on('data', function(m){\n  console.log(m);\n}\n````\n\n###board.serial\n\nLow-level access to the serial connection to the board\n\n###board.write(msg)\n\nWrite a message to the board, wrapped in predefined delimiters (! and .)\n\n###board.pinMode(pin, mode)\n\nSet the mode for a pin. `mode` is either `'in'` or `'out'`\n\n###board.digitalWrite(pin, val)\n\nWrite one of the following to a pin:\n\n####board.HIGH and board.LOW\n\nConstants for use in low-level digital writes\n\n###board.analogWrite(pin,val)\n\nWrite a value between 0-255 to a pin\n\n##led\n\n````javascript\nvar led = new arduino.Led({\n  board: board,\n  pin: 13\n});\n````\n\nPin will default to 13.\n\n###led.on()\n\nTurn the LED on\n\n###led.off()\n\nTurn the LED off\n\n###led.blink(interval)\n\nBlink the LED at `interval` ms. Defaults to 1000\n\n###led.fade(interval)\n\nFade the to full brightness then back to minimal brightness in `interval` ms. Defaults to 2000\n\n###led.bright\n\nCurrent brightness of the LED\n\n##piezo\n\n````javascript\nvar led = new arduino.Piezo({\n  board: board,\n  pin: 13\n});\n````\nPin will default to 13.\n\n###piezo.note(note, duration)\n\nPlay a pre-calculated note for a given duration (in milliseconds).\n\n`note` must be a string, one of `d`, `e`, `f`, `g`, `a`, `b`, or `c` (must be lowercase)\n\n###piezo.tone(tone, duration)\n\nWrite a square wave to the piezo element.\n\n`tone` and `duration` must be integers. See code comments for math on `tone` generation.\n\n##button\n\n````javascript\nvar button = new arduino.Button({\n  board: board,\n  pin: 13\n});\n````\nPin will default to 13.\n\nButtons are simply EventEmitters. They will emit the events `up` and `down`. You may also access their `down` property.\n\n````javascript\nbutton.on('down', function(){\n  // delete the database!\n  console.log('BOOM');\n});\n\nsetInterval(function(){\n  console.log(button.down);\n}, 1000);\n````\n\n##servo\n\n````javascript\nvar servo = new arduino.Servo({\n  board: board\n});\n\nservo.write(0);\nservo.write(180);\n````\nPin will default to 9. (Arduino PWM default)\n\n###servo.sweep()\n\nIncrement position from 0 to 180.\n\n###servo.write(pos)\n\nInstruct the servo to immediately go to a position from 0 to 180.\n\n##motor\n\n##potentiometer\n\n# protocol\n\nEach message sent to the Arduino board by the **board** class has 8 bytes.\n\nA full message looks like this:\n\n    !0113001.\n\n`!` Start\n`01` Command (digitalWrite)\n`13` Pin number\n`001` Value (high)\n`.` Stop\n\nI was drunk. It works.\n\n##command\n\nWhat is implemented right now:\n\n*  `00` pinMode\n*  `01` digitalWrite\n*  `02` digitalRead\n*  `03` analogWrite\n*  `04` analogRead\n*  `99` debug\n\n##pin\n\nPins can be sent as an integer or a string(`1`, `2`, `\"3\"`, `\"A0\"`)\n\n##value\n\n*  `board.LOW`(`0`)\n*  `board.HIGH`(`255`)\n*  integer/string from `0`-`255` for PWM pins\n\n# license\n\n(The MIT License)\n\nCopyright (c) 2011 Cam Pedersen <cam@onswipe.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n",
+  "readmeFilename": "README.md",
+  "_id": "duino@0.0.7",
+  "_from": "duino@0.0.7"
 }
