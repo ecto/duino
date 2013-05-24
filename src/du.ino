@@ -75,7 +75,7 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
-    case 96: handleSoundDuration(pin,dur); break;
+    case 96: handleSound(pin,dur); break;
     case 97: handlePing(pin,val,aux);  break;
     case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
@@ -83,9 +83,7 @@ void process() {
   }
 }
 
-void handleSoundDuration(char *pin, char *dur) {
-  tone(atoi(pin),atoi(tne), atoi(dur));
-}
+
 /*
  * Toggle debug mode
  */
@@ -263,4 +261,11 @@ void handleServo(char *pin, char *val, char *aux) {
     sprintf(m, "%s::read::%03d", pin, sval);
     Serial.println(m);
   }
+}
+
+/**
+ * handles sound using native tone function
+ */
+void handleSound(char *pin, char *dur) {
+  tone(atoi(pin),atoi(tne), atoi(dur));
 }
