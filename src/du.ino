@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 
-bool debug = false;
+bool debug = true;
 
 int index = 0;
 
@@ -10,6 +10,8 @@ char cmd[3];
 char pin[3];
 char val[4];
 char aux[4];
+char tne[7];
+char dur[7];
 
 Servo servo;
 
@@ -37,7 +39,15 @@ void process() {
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
 
-  if (atoi(cmd) > 90) {
+  if (atoi(cmd) == 95) {
+     strncpy(tne, messageBuffer + 4, 6); 
+     tne[6] = '\0';
+  }
+  else if (atoi(cmd) == 96) {
+     strncpy(dur, messageBuffer + 4, 6);
+     dur[6] = '\0';
+  }
+  else if (atoi(cmd) > 90) {
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
     strncpy(aux, messageBuffer + 6, 3);
@@ -65,6 +75,7 @@ void process() {
     case 2:  dr(pin,val);              break;
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
+    case 96: handleSoundDuration(pin,dur); break;
     case 97: handlePing(pin,val,aux);  break;
     case 98: handleServo(pin,val,aux); break;
     case 99: toggleDebug(val);         break;
@@ -72,6 +83,9 @@ void process() {
   }
 }
 
+void handleSoundDuration(char *pin, char *dur) {
+  tone(atoi(pin),atoi(tne), atoi(dur));
+}
 /*
  * Toggle debug mode
  */
