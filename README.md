@@ -6,6 +6,8 @@ This fork of [ecto's duino library](https://github.com/ecto/duino) replaces the 
 
     npm install duino
 
+Make sure to upload src/du/du.ino to your arduino
+
 ## receiver usage
 
 ````javascript
