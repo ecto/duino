@@ -4,11 +4,12 @@ bool debug = false;
 
 int index = 0;
 
-char messageBuffer[12];
+char messageBuffer[36];
 char cmd[3];
 char pin[3];
 char val[4];
 char aux[4];
+char msg[27]; // 26 max characters + 1 for null byte
 
 boolean rxStarted = false;
 
@@ -38,7 +39,10 @@ void process() {
   strncpy(pin, messageBuffer + 2, 2);
   pin[2] = '\0';
   
-  if (atoi(cmd) > 90) {
+  if (atoi(cmd) == 6) {
+    strncpy(msg, messageBuffer + 4, 26);
+    msg[26] = '\0';
+  } else if (atoi(cmd) > 90) {
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
     strncpy(aux, messageBuffer + 6, 3);
@@ -65,6 +69,7 @@ void process() {
 //  Serial.println(pin);
 //  Serial.println(val);
 //  Serial.println(aux);
+//  Serial.println(msg);
 
   switch(cmdid) {
     case 0:  sm(pin,val);              break;
@@ -73,6 +78,7 @@ void process() {
     case 3:  aw(pin,val);              break;
     case 4:  ar(pin,val);              break;
     case 5:  rfr(pin,val);             break;
+    case 6:  rft(pin,msg);         break;
     case 97: handlePing(pin,val,aux);  break;
     case 99: toggleDebug(val);         break;
     default:                           break;
@@ -168,7 +174,7 @@ void rfr(char *pin, char *val) {
   if(p == -1) { if(debug) Serial.println("badpin"); return; }
 
   if(!rxStarted){
-    vw_set_rx_pin(getPin(pin));
+    vw_set_rx_pin(p);
     vw_rx_start();       // Start the receiver PLL running
     rxStarted = true;
   }
@@ -187,6 +193,23 @@ void rfr(char *pin, char *val) {
     sprintf(m, "%02d::%s", p, (char*)buf);
     Serial.println(m);
   }
+}
+
+/*
+ * Digital RF transmit
+ */
+void rft(char *pin, char *msg) {
+  Serial.println("rft");
+  Serial.println(pin);
+  Serial.println(msg);
+  
+  if (debug) Serial.println("rft");
+  int p = getPin(pin);
+  if(p == -1) { if(debug) Serial.println("badpin"); return; }
+  
+  vw_set_tx_pin(p);
+  vw_send((uint8_t *)msg, strlen(msg) + 1); // +1 to include null byte
+  vw_wait_tx(); // Wait until the whole message is gone
 }
 
 int getPin(char *pin) { //Converts to A0-A5, and returns -1 on error
