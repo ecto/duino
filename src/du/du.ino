@@ -22,8 +22,10 @@ void setup() {
 void loop() {
   while(Serial.available() > 0) {
     char x = Serial.read();
-    if (x == '!') index = 0;      // start
-    else if (x == '.') process(); // end
+    if (x == '!') {
+      memset(&messageBuffer[0], 0, sizeof(messageBuffer)); 
+      index = 0;      // start
+    } else if (x == '.') process(); // end
     else messageBuffer[index++] = x;
   }
 }
@@ -198,11 +200,7 @@ void rfr(char *pin, char *val) {
 /*
  * Digital RF transmit
  */
-void rft(char *pin, char *msg) {
-  Serial.println("rft");
-  Serial.println(pin);
-  Serial.println(msg);
-  
+void rft(char *pin, char *msg) {  
   if (debug) Serial.println("rft");
   int p = getPin(pin);
   if(p == -1) { if(debug) Serial.println("badpin"); return; }

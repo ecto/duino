@@ -7,5 +7,6 @@ module.exports = {
   Sensor: require('./lib/sensor'),
   Ping:   require('./lib/ping'),
   PIR:    require('./lib/pir'),
-  RFReceiver: require('./lib/rfReceiver')
+  RFReceiver: require('./lib/rfReceiver'),
+  RFTransmitter: require('./lib/rfTransmitter')
 };
