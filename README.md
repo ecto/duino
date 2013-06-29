@@ -2,7 +2,11 @@
 
 This fork of [ecto's duino library](https://github.com/ecto/duino) replaces the servo library with a RF receiver and transmitter.
 
-# receiver usage
+## install
+
+    npm install duino
+
+## receiver usage
 
 ````javascript
 var arduino = require('duino'),
@@ -21,7 +25,7 @@ board.on('ready', function(){
 });
 ````
 
-# transmitter usage
+## transmitter usage
 
 ````javascript
 var arduino = require('duino'),
