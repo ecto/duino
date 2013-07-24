@@ -5,11 +5,12 @@
     { "name": "Leonhardt Wille", "email": "wille@riverlabs.de" },
     { "name": "Seiya Konno", "email": "nulltask@gmail.com" },
     { "name": "Nathan Vander Wilt", "email": "nate@calftrail.com" },
-    { "name": "Adam Brault (&yet)", "email": "contact@andyet.com" }
+    { "name": "Adam Brault (&yet)", "email": "contact@andyet.com" },
+    { "name": "Emanuele Tessore", "email": "setola@gmail.com" }
   ],
   "name": "duino",
   "description": "Arduino framework for mad scientists",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "keywords": [
     "arduino",
     "serial",
