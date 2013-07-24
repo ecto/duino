@@ -36,7 +36,16 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 ##board
 
-Right now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.
+````javascript
+var board = new arduino.Board({
+  device: "ACM"
+});
+````
+The board library will attempt to autodiscover the Arduino.
+The `device` option can be used to set a regex filter that will help the library when scanning for matching devices.
+**Note**: the value of this parameter will be used as argument of the grep command
+
+If this parameter is not provided the board library will attempt to autodiscover the Arduino by quering every device containing 'usb' in its name.
 
 ````javascript
 var board = new arduino.Board({
