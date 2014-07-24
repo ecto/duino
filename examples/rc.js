@@ -12,6 +12,7 @@ var rc = new arduino.RC({
 
 board.on('ready', function(){
   setTimeout(function() {
+    // alternative: rc.decimal("123456")
   	rc.triState("0FFF0FFFFF0F");
   }, 1000);
   setTimeout(function() {

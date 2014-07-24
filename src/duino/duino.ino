@@ -1,5 +1,4 @@
 #include <Servo.h>
-
 #include <RCSwitch.h>
 #include <IRremote.h>
 
@@ -55,7 +54,7 @@ void process() {
     val[8] = '\0';
     strncpy(addr, messageBuffer + 14, 4);
     addr[4] = '\0';
-  } else if (cmdid == 96) {
+  } else if (cmdid == 96 || cmdid == 94) {
     strncpy(val, messageBuffer + 4, 12);
     val[12] = '\0';
   } else if (cmdid > 96) {
@@ -76,17 +75,18 @@ void process() {
   // Serial.println(aux);
 
   switch(cmdid) {
-    case 0:  sm(pin,val);              break;
-    case 1:  dw(pin,val);              break;
-    case 2:  dr(pin,val);              break;
-    case 3:  aw(pin,val);              break;
-    case 4:  ar(pin,val);              break;
-    case 95: handleIRsend(type, val, addr);   break;
-    case 96: handleRCTriState(pin, val); break;
-    case 97: handlePing(pin,val,aux);  break;
-    case 98: handleServo(pin,val,aux); break;
-    case 99: toggleDebug(val);         break;
-    default:                           break;
+    case 0:  sm(pin,val);                   break;
+    case 1:  dw(pin,val);                   break;
+    case 2:  dr(pin,val);                   break;
+    case 3:  aw(pin,val);                   break;
+    case 4:  ar(pin,val);                   break;
+    case 94: handleRCDecimal(pin, val);     break;
+    case 95: handleIRsend(type, val, addr); break;
+    case 96: handleRCTriState(pin, val);    break;
+    case 97: handlePing(pin,val,aux);       break;
+    case 98: handleServo(pin,val,aux);      break;
+    case 99: toggleDebug(val);              break;
+    default:                                break;
   }
 }
 
@@ -275,6 +275,20 @@ void handleRCTriState(char *pin, char *val) {
   RCSwitch rc = RCSwitch();
   rc.enableTransmit(p);
   rc.sendTriState(val);
+}
+
+/*
+ * Handle RC commands via decimal code
+ * For those sockets that don't use tri-state.
+ * handleRCDecimal("10", "5522351")
+ */
+void handleRCDecimal(char *pin, char *val) {
+  int p = getPin(pin);
+  if (p == -1) { if (debug) Serial.println("badpin"); return; }
+  if (debug) Serial.println("RCdec" + atol(val));
+  RCSwitch rc = RCSwitch();
+  rc.enableTransmit(p);
+  rc.send(atol(val), 24);
 }
 
 /*
