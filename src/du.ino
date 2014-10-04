@@ -1,15 +1,17 @@
 #include <Servo.h>
-#include "RCSwitch.h"
+#include <RCSwitch.h>
 
 bool debug = false;
 
 int index = 0;
 
-char messageBuffer[18];
+char messageBuffer[24];
 char cmd[3];
 char pin[3];
 char val[13];
 char aux[4];
+char type[2];
+char addr[5];
 
 Servo servo;
 
@@ -42,10 +44,17 @@ void process() {
   }
   int cmdid = atoi(cmd);
 
-  if (cmdid == 96) {
+  if (cmdid == 95) {
+    strncpy(type, messageBuffer + 4, 1);
+    type[1] = '\0';
+    strncpy(val, messageBuffer + 5, 9);
+    val[8] = '\0';
+    strncpy(addr, messageBuffer + 14, 4);
+    addr[4] = '\0';
+  } else if (cmdid == 96 || cmdid == 94) {
     strncpy(val, messageBuffer + 4, 12);
     val[12] = '\0';
-  } else if (cmdid > 90) {
+  } else if (cmdid > 96) {
     strncpy(val, messageBuffer + 4, 2);
     val[2] = '\0';
     strncpy(aux, messageBuffer + 6, 3);
@@ -63,16 +72,17 @@ void process() {
   // Serial.println(aux);
 
   switch(cmdid) {
-    case 0:  sm(pin,val);              break;
-    case 1:  dw(pin,val);              break;
-    case 2:  dr(pin,val);              break;
-    case 3:  aw(pin,val);              break;
-    case 4:  ar(pin,val);              break;
-    case 96: handleRCTriState(pin, val); break;
-    case 97: handlePing(pin,val,aux);  break;
-    case 98: handleServo(pin,val,aux); break;
-    case 99: toggleDebug(val);         break;
-    default:                           break;
+    case 0:  sm(pin,val);                   break;
+    case 1:  dw(pin,val);                   break;
+    case 2:  dr(pin,val);                   break;
+    case 3:  aw(pin,val);                   break;
+    case 4:  ar(pin,val);                   break;
+    case 94: handleRCDecimal(pin, val);     break;
+    case 96: handleRCTriState(pin, val);    break;
+    case 97: handlePing(pin,val,aux);       break;
+    case 98: handleServo(pin,val,aux);      break;
+    case 99: toggleDebug(val);              break;
+    default:                                break;
   }
 }
 
@@ -261,4 +271,18 @@ void handleRCTriState(char *pin, char *val) {
   RCSwitch rc = RCSwitch();
   rc.enableTransmit(p);
   rc.sendTriState(val);
+}
+
+/*
+ * Handle RC commands via decimal code
+ * For those sockets that don't use tri-state.
+ * handleRCDecimal("10", "5522351")
+ */
+void handleRCDecimal(char *pin, char *val) {
+  int p = getPin(pin);
+  if (p == -1) { if (debug) Serial.println("badpin"); return; }
+  if (debug) Serial.println("RCdec" + atol(val));
+  RCSwitch rc = RCSwitch();
+  rc.enableTransmit(p);
+  rc.send(atol(val), 24);
 }
