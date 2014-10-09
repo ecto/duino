@@ -2,7 +2,7 @@ var arduino = require('../');
 
 var board = new arduino.Board({
   debug: true
-});
+}).setup();
 
 var piezo = new arduino.Piezo({
   board: board

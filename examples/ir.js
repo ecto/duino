@@ -4,7 +4,7 @@ var arduino = require('../')
 
 var board = new arduino.Board({
   debug: true
-});
+}).setup();
 
 var ir = new arduino.IR({
   board: board

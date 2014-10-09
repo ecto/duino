@@ -1,6 +1,6 @@
 var arduino = require('../');
 
-var board = new arduino.Board();
+var board = new arduino.Board().setup();
 
 var button = new arduino.Button({
   board: board,

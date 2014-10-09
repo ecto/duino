@@ -3,7 +3,7 @@ var arduino = require('../')
 
 var board = new arduino.Board({
   debug: true
-});
+}).setup();
 
 var rc = new arduino.RC({
   board: board,
