@@ -1,5 +1,4 @@
 #include <Servo.h>
-
 #include <RCSwitch.h>
 #include <IRremote.h>
 
@@ -275,6 +274,20 @@ void handleRCTriState(char *pin, char *val) {
   RCSwitch rc = RCSwitch();
   rc.enableTransmit(p);
   rc.sendTriState(val);
+}
+
+/*
+ * Handle RC commands via decimal code
+ * For those sockets that don't use tri-state.
+ * handleRCDecimal("10", "5522351")
+ */
+void handleRCDecimal(char *pin, char *val) {
+  int p = getPin(pin);
+  if (p == -1) { if (debug) Serial.println("badpin"); return; }
+  if (debug) Serial.println("RCdec" + atol(val));
+  RCSwitch rc = RCSwitch();
+  rc.enableTransmit(p);
+  rc.send(atol(val), 24);
 }
 
 /*
