@@ -2,7 +2,7 @@ var arduino = require('../');
 
 var board = new arduino.Board({
   debug: true
-});
+}).setup();
 
 var aled = new arduino.Led({
 	board: board,
