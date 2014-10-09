@@ -3,7 +3,7 @@ var arduino = require('../');
 var board = new arduino.Board({
   debug: true,
   device: "ACM"
-});
+}).setup();
 
 var led = new arduino.Led({
   board: board,

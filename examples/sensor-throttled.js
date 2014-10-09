@@ -3,7 +3,7 @@ var arduino = require('../'),
 
 board = new arduino.Board({
   debug: false
-});
+}).setup();
 
 sensor = new arduino.Sensor({
   board: board,
