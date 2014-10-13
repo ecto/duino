@@ -1,7 +1,7 @@
 
 var arduino = require('../');
 
-var board = new arduino.Board();
+var board = new arduino.Board().setup();
 
 board.on('connected', function(){
   board.write('HELLO WORLD');
