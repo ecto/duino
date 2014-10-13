@@ -36,7 +36,16 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 ##board
 
-Right now, the board library will attempt to autodiscover the Arduino. I'm going to make it configurable, don't worry.
+````javascript
+var board = new arduino.Board({
+  device: "ACM"
+});
+````
+The board library will attempt to autodiscover the Arduino.
+The `device` option can be used to set a regex filter that will help the library when scanning for matching devices.
+**Note**: the value of this parameter will be used as argument of the grep command
+
+If this parameter is not provided the board library will attempt to autodiscover the Arduino by quering every device containing 'usb' in its name.
 
 ````javascript
 var board = new arduino.Board({
@@ -119,6 +128,67 @@ Fade the to full brightness then back to minimal brightness in `interval` ms. De
 
 Current brightness of the LED
 
+##lcd
+
+This is a port of the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal) into JavaScript. Note that communicating with the LCD requires use of the synchronous `board.delay()` busy loop which will block other node.js events from being processed for several milliseconds at a time. (This could be converted to pause a board-level buffered message queue instead.)
+
+````javascript
+var lcd = new d.LCD({
+  board: board,
+  pins: {rs:12, rw:11, e:10, data:[5, 4, 3, 2]}
+});
+lcd.begin(16, 2);
+lcd.print("Hello Internet.");
+````
+
+In `options`, the "pins" field can either be an array matching a call to any of the [LiquidCrystal constructors](http://arduino.cc/en/Reference/LiquidCrystalConstructor) or an object with "rs", "rw" (optional), "e" and a 4- or 8-long array of "data" pins. Pins will default to `[12, 11, 5, 4, 3, 2]` if not provided.
+
+###lcd.begin(), lcd.clear(), lcd.home(), lcd.setCursor(), lcd.scrollDisplayLeft(), lcd.scrollDisplayRight()
+
+These should behave the same as their counterparts in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal).
+
+###lcd.display(on), lcd.cursor(on), lcd.blink(on), lcd.autoscroll(on)
+
+These are similar to the methods in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal), however they can take an optional boolean parameter. If true or not provided, the setting is enabled. If false, the setting is disabled. For compatibility `.noDisplay()`, `.noCursor()`, `.noBlink()` and `.noAutoscroll()` methods are provided as well.
+
+###lcd.write(val), lcd.print(val)
+
+These take a buffer, string or integer and send it to the display. The `.write` and `print` methods are equivalent, aliases to the same function.
+
+###lcd.createChar(location, charmap)
+
+Configures a custom character for code `location` (numbers 0–7). `charmap` can be a 40-byte buffer as in [the C++ method](http://arduino.cc/en/Reference/LiquidCrystalCreateChar), or an array of 5-bit binary strings, or a 40-character string with pixels denoted by any non-space (`' '`) character. These bits determine the 5x8 pixel pattern of the custom character.
+
+````javascript
+var square = new Buffer("1f1f1f1f1f1f1f1f", 'hex');
+
+var smiley = [
+  '00000',
+  '10001',
+  '00000',
+  '00000',
+  '10001',
+  '01110',
+  '00000'
+];
+
+var random =
+  ".  .." +
+  " . . " +
+  ". . ." +
+  " . . " +
+  " ..  " +
+  ".  . " +
+  " .  ." +
+  ".. .." ;
+
+lcd.createChar(0, square);
+lcd.createChar(1, smiley);
+lcd.createChar(2, random);
+lcd.setCursor(5,2);
+lcd.print(new Buffer("\0\1\2\1\0"));    // NOTE: when `.print`ing a string, 'ascii' turns \0 into a space
+````
+
 ##piezo
 
 ````javascript
@@ -162,6 +232,20 @@ button.on('down', function(){
 setInterval(function(){
   console.log(button.down);
 }, 1000);
+````
+
+##ping
+
+See: <http://arduino.cc/en/Tutorial/Ping>
+
+````javascript
+var range = new arduino.Ping({
+  board: board
+});
+
+range.on('read', function () {
+  console.log("Distance to target (cm)", range.centimeters);
+});
 ````
 
 ##servo
@@ -213,6 +297,8 @@ What is implemented right now:
 *  `02` digitalRead
 *  `03` analogWrite
 *  `04` analogRead
+*  `97` ping
+*  `98` servo
 *  `99` debug
 
 ##pin
