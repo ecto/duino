@@ -4,7 +4,7 @@ var arduino = require('../'),
 // Construct instances
 board = new arduino.Board({
   debug: true
-});
+}).setup();
 
 led = new arduino.Led({
   board: board,

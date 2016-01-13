@@ -8,5 +8,7 @@ module.exports = {
   Sensor: require('./lib/sensor'),
   Ping:   require('./lib/ping'),
   PIR:    require('./lib/pir'),
-  LCD:    require('./lib/lcd')
+  LCD:    require('./lib/lcd'),
+  RC:     require('./lib/rc'),
+  IR:     require('./lib/ir')
 };

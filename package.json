@@ -1,16 +1,22 @@
 {
-  "author": "Cam Pedersen <diffference@gmail.com> (http://campedersen.com/)",
+  "author": {
+    "name": "Cam Pedersen",
+    "email": "diffference@gmail.com",
+    "url": "http://campedersen.com/"
+  },
   "contributors": [
     { "name": "Rick Waldron", "email": "waldron.rick@gmail.com" },
     { "name": "Leonhardt Wille", "email": "wille@riverlabs.de" },
     { "name": "Seiya Konno", "email": "nulltask@gmail.com" },
     { "name": "Nathan Vander Wilt", "email": "nate@calftrail.com" },
     { "name": "Adam Brault (&yet)", "email": "contact@andyet.com" },
-    { "name": "Emanuele Tessore", "email": "setola@gmail.com" }
+    { "name": "Emanuele Tessore", "email": "setola@gmail.com" },
+    { "name": "Willi Thiel", "email": "ni-c@ni-c.de" },
+    { "name": "Tom Janson", "email": "priv.tom.janson+duino@gmail.com" }
   ],
   "name": "duino",
   "description": "Arduino framework for mad scientists",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "keywords": [
     "arduino",
     "serial",
@@ -26,7 +32,7 @@
   },
   "dependencies": {
     "serialport": "*",
-    "colors": "*"
+    "chalk": "*"
   },
   "devDependencies": {}
 }
