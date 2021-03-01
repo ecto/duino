@@ -34,7 +34,7 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 # libraries
 
-##board
+## board
 
 ````javascript
 var board = new arduino.Board({
@@ -73,31 +73,31 @@ board.on('data', function(m){
 }
 ````
 
-###board.serial
+### board.serial
 
 Low-level access to the serial connection to the board
 
-###board.write(msg)
+### board.write(msg)
 
 Write a message to the board, wrapped in predefined delimiters (! and .)
 
-###board.pinMode(pin, mode)
+### board.pinMode(pin, mode)
 
 Set the mode for a pin. `mode` is either `'in'` or `'out'`
 
-###board.digitalWrite(pin, val)
+### board.digitalWrite(pin, val)
 
 Write one of the following to a pin:
 
-####board.HIGH and board.LOW
+#### board.HIGH and board.LOW
 
 Constants for use in low-level digital writes
 
-###board.analogWrite(pin,val)
+### board.analogWrite(pin,val)
 
 Write a value between 0-255 to a pin
 
-##led
+## led
 
 ````javascript
 var led = new arduino.Led({
@@ -108,27 +108,27 @@ var led = new arduino.Led({
 
 Pin will default to 13.
 
-###led.on()
+### led.on()
 
 Turn the LED on
 
-###led.off()
+### led.off()
 
 Turn the LED off
 
-###led.blink(interval)
+### led.blink(interval)
 
 Blink the LED at `interval` ms. Defaults to 1000
 
-###led.fade(interval)
+### led.fade(interval)
 
 Fade the to full brightness then back to minimal brightness in `interval` ms. Defaults to 2000
 
-###led.bright
+### led.bright
 
 Current brightness of the LED
 
-##lcd
+## lcd
 
 This is a port of the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal) into JavaScript. Note that communicating with the LCD requires use of the synchronous `board.delay()` busy loop which will block other node.js events from being processed for several milliseconds at a time. (This could be converted to pause a board-level buffered message queue instead.)
 
@@ -143,19 +143,19 @@ lcd.print("Hello Internet.");
 
 In `options`, the "pins" field can either be an array matching a call to any of the [LiquidCrystal constructors](http://arduino.cc/en/Reference/LiquidCrystalConstructor) or an object with "rs", "rw" (optional), "e" and a 4- or 8-long array of "data" pins. Pins will default to `[12, 11, 5, 4, 3, 2]` if not provided.
 
-###lcd.begin(), lcd.clear(), lcd.home(), lcd.setCursor(), lcd.scrollDisplayLeft(), lcd.scrollDisplayRight()
+### lcd.begin(), lcd.clear(), lcd.home(), lcd.setCursor(), lcd.scrollDisplayLeft(), lcd.scrollDisplayRight()
 
 These should behave the same as their counterparts in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal).
 
-###lcd.display(on), lcd.cursor(on), lcd.blink(on), lcd.autoscroll(on)
+### lcd.display(on), lcd.cursor(on), lcd.blink(on), lcd.autoscroll(on)
 
 These are similar to the methods in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal), however they can take an optional boolean parameter. If true or not provided, the setting is enabled. If false, the setting is disabled. For compatibility `.noDisplay()`, `.noCursor()`, `.noBlink()` and `.noAutoscroll()` methods are provided as well.
 
-###lcd.write(val), lcd.print(val)
+### lcd.write(val), lcd.print(val)
 
 These take a buffer, string or integer and send it to the display. The `.write` and `print` methods are equivalent, aliases to the same function.
 
-###lcd.createChar(location, charmap)
+### lcd.createChar(location, charmap)
 
 Configures a custom character for code `location` (numbers 0–7). `charmap` can be a 40-byte buffer as in [the C++ method](http://arduino.cc/en/Reference/LiquidCrystalCreateChar), or an array of 5-bit binary strings, or a 40-character string with pixels denoted by any non-space (`' '`) character. These bits determine the 5x8 pixel pattern of the custom character.
 
@@ -189,7 +189,7 @@ lcd.setCursor(5,2);
 lcd.print(new Buffer("\0\1\2\1\0"));    // NOTE: when `.print`ing a string, 'ascii' turns \0 into a space
 ````
 
-##piezo
+## piezo
 
 ````javascript
 var led = new arduino.Piezo({
@@ -199,19 +199,19 @@ var led = new arduino.Piezo({
 ````
 Pin will default to 13.
 
-###piezo.note(note, duration)
+### piezo.note(note, duration)
 
 Play a pre-calculated note for a given duration (in milliseconds).
 
 `note` must be a string, one of `d`, `e`, `f`, `g`, `a`, `b`, or `c` (must be lowercase)
 
-###piezo.tone(tone, duration)
+### piezo.tone(tone, duration)
 
 Write a square wave to the piezo element.
 
 `tone` and `duration` must be integers. See code comments for math on `tone` generation.
 
-##button
+## button
 
 ````javascript
 var button = new arduino.Button({
@@ -234,7 +234,7 @@ setInterval(function(){
 }, 1000);
 ````
 
-##ping
+## ping
 
 See: <http://arduino.cc/en/Tutorial/Ping>
 
@@ -248,7 +248,7 @@ range.on('read', function () {
 });
 ````
 
-##servo
+## servo
 
 ````javascript
 var servo = new arduino.Servo({
@@ -260,17 +260,17 @@ servo.write(180);
 ````
 Pin will default to 9. (Arduino PWM default)
 
-###servo.sweep()
+### servo.sweep()
 
 Increment position from 0 to 180.
 
-###servo.write(pos)
+### servo.write(pos)
 
 Instruct the servo to immediately go to a position from 0 to 180.
 
-##motor
+## motor
 
-##potentiometer
+## potentiometer
 
 # protocol
 
@@ -288,7 +288,7 @@ A full message looks like this:
 
 I was drunk. It works.
 
-##command
+## command
 
 What is implemented right now:
 
@@ -301,11 +301,11 @@ What is implemented right now:
 *  `98` servo
 *  `99` debug
 
-##pin
+## pin
 
 Pins can be sent as an integer or a string(`1`, `2`, `"3"`, `"A0"`)
 
-##value
+## value
 
 *  `board.LOW`(`0`)
 *  `board.HIGH`(`255`)
