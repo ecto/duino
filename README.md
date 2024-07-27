@@ -34,7 +34,7 @@ The way this works is simple (in theory, not in practice). The Arduino listens f
 
 # libraries
 
-##board
+## board
 
 ````javascript
 var board = new arduino.Board({
@@ -97,7 +97,7 @@ Constants for use in low-level digital writes
 
 Write a value between 0-255 to a pin
 
-##led
+## led
 
 ````javascript
 var led = new arduino.Led({
@@ -108,27 +108,27 @@ var led = new arduino.Led({
 
 Pin will default to 13.
 
-###led.on()
+### led.on()
 
 Turn the LED on
 
-###led.off()
+### led.off()
 
 Turn the LED off
 
-###led.blink(interval)
+### led.blink(interval)
 
 Blink the LED at `interval` ms. Defaults to 1000
 
-###led.fade(interval)
+### led.fade(interval)
 
 Fade the to full brightness then back to minimal brightness in `interval` ms. Defaults to 2000
 
-###led.bright
+### led.bright
 
 Current brightness of the LED
 
-##lcd
+## lcd
 
 This is a port of the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal) into JavaScript. Note that communicating with the LCD requires use of the synchronous `board.delay()` busy loop which will block other node.js events from being processed for several milliseconds at a time. (This could be converted to pause a board-level buffered message queue instead.)
 
@@ -143,19 +143,19 @@ lcd.print("Hello Internet.");
 
 In `options`, the "pins" field can either be an array matching a call to any of the [LiquidCrystal constructors](http://arduino.cc/en/Reference/LiquidCrystalConstructor) or an object with "rs", "rw" (optional), "e" and a 4- or 8-long array of "data" pins. Pins will default to `[12, 11, 5, 4, 3, 2]` if not provided.
 
-###lcd.begin(), lcd.clear(), lcd.home(), lcd.setCursor(), lcd.scrollDisplayLeft(), lcd.scrollDisplayRight()
+### lcd.begin(), lcd.clear(), lcd.home(), lcd.setCursor(), lcd.scrollDisplayLeft(), lcd.scrollDisplayRight()
 
 These should behave the same as their counterparts in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal).
 
-###lcd.display(on), lcd.cursor(on), lcd.blink(on), lcd.autoscroll(on)
+### lcd.display(on), lcd.cursor(on), lcd.blink(on), lcd.autoscroll(on)
 
 These are similar to the methods in the [LiquidCrystal library](http://arduino.cc/en/Reference/LiquidCrystal), however they can take an optional boolean parameter. If true or not provided, the setting is enabled. If false, the setting is disabled. For compatibility `.noDisplay()`, `.noCursor()`, `.noBlink()` and `.noAutoscroll()` methods are provided as well.
 
-###lcd.write(val), lcd.print(val)
+### lcd.write(val), lcd.print(val)
 
 These take a buffer, string or integer and send it to the display. The `.write` and `print` methods are equivalent, aliases to the same function.
 
-###lcd.createChar(location, charmap)
+### lcd.createChar(location, charmap)
 
 Configures a custom character for code `location` (numbers 0–7). `charmap` can be a 40-byte buffer as in [the C++ method](http://arduino.cc/en/Reference/LiquidCrystalCreateChar), or an array of 5-bit binary strings, or a 40-character string with pixels denoted by any non-space (`' '`) character. These bits determine the 5x8 pixel pattern of the custom character.
 
@@ -189,7 +189,7 @@ lcd.setCursor(5,2);
 lcd.print(new Buffer("\0\1\2\1\0"));    // NOTE: when `.print`ing a string, 'ascii' turns \0 into a space
 ````
 
-##piezo
+## piezo
 
 ````javascript
 var led = new arduino.Piezo({
@@ -199,7 +199,7 @@ var led = new arduino.Piezo({
 ````
 Pin will default to 13.
 
-###piezo.note(note, duration)
+### piezo.note(note, duration)
 
 Play a pre-calculated note for a given duration (in milliseconds).
 
@@ -211,7 +211,7 @@ Write a square wave to the piezo element.
 
 `tone` and `duration` must be integers. See code comments for math on `tone` generation.
 
-##button
+## button
 
 ````javascript
 var button = new arduino.Button({
@@ -234,7 +234,7 @@ setInterval(function(){
 }, 1000);
 ````
 
-##ping
+## ping
 
 See: <http://arduino.cc/en/Tutorial/Ping>
 
@@ -248,7 +248,7 @@ range.on('read', function () {
 });
 ````
 
-##servo
+## servo
 
 ````javascript
 var servo = new arduino.Servo({
@@ -260,17 +260,17 @@ servo.write(180);
 ````
 Pin will default to 9. (Arduino PWM default)
 
-###servo.sweep()
+### servo.sweep()
 
 Increment position from 0 to 180.
 
-###servo.write(pos)
+### servo.write(pos)
 
 Instruct the servo to immediately go to a position from 0 to 180.
 
-##motor
+## motor
 
-##potentiometer
+## potentiometer
 
 # protocol
 
@@ -286,40 +286,25 @@ A full message looks like this:
 `001` Value (high)
 `.` Stop
 
-I was drunk. It works.
-
-##command
+## command
 
 What is implemented right now:
 
-*  `00` pinMode
-*  `01` digitalWrite
-*  `02` digitalRead
-*  `03` analogWrite
-*  `04` analogRead
-*  `97` ping
-*  `98` servo
-*  `99` debug
+-  `00` pinMode
+-  `01` digitalWrite
+-  `02` digitalRead
+-  `03` analogWrite
+-  `04` analogRead
+-  `97` ping
+-  `98` servo
+-  `99` debug
 
-##pin
+## pin
 
 Pins can be sent as an integer or a string(`1`, `2`, `"3"`, `"A0"`)
 
-##value
+## value
 
-*  `board.LOW`(`0`)
-*  `board.HIGH`(`255`)
-*  integer/string from `0`-`255` for PWM pins
-
-# license
-
-(The MIT License)
-
-Copyright (c) 2011 Cam Pedersen <cam@onswipe.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+-  `board.LOW`(`0`)
+-  `board.HIGH`(`255`)
+-  integer/string from `0`-`255` for PWM pins
